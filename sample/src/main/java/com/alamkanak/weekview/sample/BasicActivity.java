@@ -37,8 +37,9 @@ public class BasicActivity extends BaseActivity {
         Calendar endTime = (Calendar) startTime.clone();
         endTime.add(Calendar.HOUR, 1);
         endTime.set(Calendar.MONTH, newMonth - 1);
-        WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
+        WeekViewEvent event = new WeekViewEvent(1, "Custom Event", startTime, endTime);
         event.setColor(getResources().getColor(R.color.event_color_01));
+        event.setAlert("Hello World");
         events.add(event);
 
         startTime = Calendar.getInstance();
