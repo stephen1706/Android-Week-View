@@ -56,8 +56,6 @@ import static com.alamkanak.weekview.WeekViewUtil.today;
  */
 public class WeekView extends View {
 
-
-
     private enum Direction {
         NONE, LEFT, RIGHT, VERTICAL;
     }
@@ -123,6 +121,7 @@ public class WeekView extends View {
     private int mIndicatorWidth = 10;
     private int mFirstDayOfWeek = Calendar.MONDAY;
     private int mTextSize = 12;
+    private int mHeaderTextSize = 12;
     private int mHeaderColumnPadding = 10;
     private int mHeaderColumnTextColor = Color.BLACK;
     private int mNumberOfVisibleDays = 3;
@@ -419,6 +418,7 @@ public class WeekView extends View {
             mEffectiveMinHourHeight = mMinHourHeight;
             mMaxHourHeight = a.getDimensionPixelSize(R.styleable.WeekView_maxHourHeight, mMaxHourHeight);
             mTextSize = a.getDimensionPixelSize(R.styleable.WeekView_textSize, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, mTextSize, context.getResources().getDisplayMetrics()));
+            mHeaderTextSize = a.getDimensionPixelSize(R.styleable.WeekView_headerTextSize, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, mHeaderTextSize, context.getResources().getDisplayMetrics()));
             mHeaderColumnPadding = a.getDimensionPixelSize(R.styleable.WeekView_headerColumnPadding, mHeaderColumnPadding);
             mColumnGap = a.getDimensionPixelSize(R.styleable.WeekView_columnGap, mColumnGap);
             mIndicatorWidth = a.getDimensionPixelSize(R.styleable.WeekView_indicatorWidth, mIndicatorWidth);
@@ -501,7 +501,7 @@ public class WeekView extends View {
         mHeaderTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mHeaderTextPaint.setColor(mHeaderColumnTextColor);
         mHeaderTextPaint.setTextAlign(Paint.Align.CENTER);
-        mHeaderTextPaint.setTextSize(mTextSize);
+        mHeaderTextPaint.setTextSize(mHeaderTextSize);
         mHeaderTextPaint.getTextBounds(exampleTime, 0, exampleTime.length(), rect);
         mHeaderTextHeight = rect.height();
         mHeaderTextPaint.setTypeface(mTypeface);
@@ -541,7 +541,7 @@ public class WeekView extends View {
         // Prepare today header text color paint.
         mTodayHeaderTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTodayHeaderTextPaint.setTextAlign(Paint.Align.CENTER);
-        mTodayHeaderTextPaint.setTextSize(mTextSize);
+        mTodayHeaderTextPaint.setTextSize(mHeaderTextSize);
         mTodayHeaderTextPaint.setTypeface(mTypeface);
 
         mTodayHeaderTextPaint.setColor(mTodayHeaderTextColor);
@@ -1779,14 +1779,18 @@ public class WeekView extends View {
         mShowFirstDayOfWeekFirst = show;
     }
 
+    public void setHeaderTextSize(int mHeaderTextSize) {
+        this.mHeaderTextSize = mHeaderTextSize;
+    }
+
     public int getTextSize() {
         return mTextSize;
     }
 
     public void setTextSize(int textSize) {
         mTextSize = textSize;
-        mTodayHeaderTextPaint.setTextSize(mTextSize);
-        mHeaderTextPaint.setTextSize(mTextSize);
+        mTodayHeaderTextPaint.setTextSize(mHeaderTextSize);
+        mHeaderTextPaint.setTextSize(mHeaderTextSize);
         mTimeTextPaint.setTextSize(mTextSize);
         invalidate();
     }

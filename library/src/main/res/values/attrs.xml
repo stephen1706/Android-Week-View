@@ -58,6 +58,7 @@
         <attr name="showFirstDayOfWeekFirst" format="boolean"/>
         <attr name="showNowLine" format="boolean"/>
         <attr name="textSize" format="dimension"/>
+        <attr name="headerTextSize" format="dimension"/>
         <attr name="timeColumnResolution" format="integer" />
         <attr name="todayBackgroundColor" format="color"/>
         <attr name="todayHeaderTextColor" format="color"/>

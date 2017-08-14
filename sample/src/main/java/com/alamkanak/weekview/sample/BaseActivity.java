@@ -59,7 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         // Set AddEvent Click Listener
         mWeekView.setAddEventClickListener(this);
 
-        mWeekView.setShowHeader(false);
+//        mWeekView.setShowHeader(false);
 
         // Set minDate
         /*Calendar minDate = Calendar.getInstance();
