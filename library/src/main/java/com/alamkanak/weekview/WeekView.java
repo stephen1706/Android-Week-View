@@ -744,16 +744,7 @@ public class WeekView extends View {
             // Draw the text if its y position is not outside of the visible area. The pivot point of the text is the point at the bottom-right corner.
             if (time == null)
                 throw new IllegalStateException("A DateTimeInterpreter must not return null time");
-            if (top < getHeight()) {
-
-                if(minutes > 0) {
-                    mTimeTextPaint.setTextSize(mTextSize/1.5f);
-                } else {
-                    mTimeTextPaint.setTextSize(mTextSize);
-                }
-
-                canvas.drawText(time, mTimeTextWidth + mHeaderColumnPadding, top + mTimeTextHeight, mTimeTextPaint);
-            }
+            if (top < getHeight()) canvas.drawText(time, mTimeTextWidth + mHeaderColumnPadding, top + mTimeTextHeight, mTimeTextPaint);
         }
     }
 
