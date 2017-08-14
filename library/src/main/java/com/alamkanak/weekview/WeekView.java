@@ -735,7 +735,16 @@ public class WeekView extends View {
             // Draw the text if its y position is not outside of the visible area. The pivot point of the text is the point at the bottom-right corner.
             if (time == null)
                 throw new IllegalStateException("A DateTimeInterpreter must not return null time");
-            if (top < getHeight()) canvas.drawText(time, mTimeTextWidth + mHeaderColumnPadding, top + mTimeTextHeight, mTimeTextPaint);
+            if (top < getHeight()) {
+
+                if(minutes > 0) {
+                    mTimeTextPaint.setTextSize(mTextSize/1.5f);
+                } else {
+                    mTimeTextPaint.setTextSize(mTextSize);
+                }
+
+                canvas.drawText(time, mTimeTextWidth + mHeaderColumnPadding, top + mTimeTextHeight, mTimeTextPaint);
+            }
         }
     }
 
@@ -1058,15 +1067,23 @@ public class WeekView extends View {
                             bottom > mHeaderHeight + mHeaderRowPadding * 2 + mTimeTextHeight / 2 + mHeaderMarginBottom
                             ) {
                         mEventRects.get(i).rectF = new RectF(left, top, right, bottom);
+
                         mEventBackgroundPaint.setColor(mEventRects.get(i).event.getColor() == 0 ? mDefaultEventColor : mEventRects.get(i).event.getColor());
                         mEventBackgroundPaint.setShader(mEventRects.get(i).event.getShader());
-                        canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventBackgroundPaint);
+
+                        Paint paint = new Paint();
+                        paint.setColor(Color.parseColor("#FFFFFF"));
+                        canvas.drawRoundRect(mEventRects.get(i).rectF, 0, 0, paint);
+
+                        RectF indicator = new RectF(left, top, left+mColumnGap, bottom);
+                        canvas.drawRoundRect(indicator, mEventCornerRadius, mEventCornerRadius, mEventBackgroundPaint);
+
                         float topToUse = top;
                         if(mEventRects.get(i).event.getStartTime().get(Calendar.HOUR_OF_DAY) < mMinTime)
                             topToUse = mHourHeight *  getPassedMinutesInDay(mMinTime, 0) / 60 + mCurrentOrigin.y + mHeaderHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 + mEventMarginVertical - marginTop;
 
                         if(mEventRects.get(i).event.getId() != mNewEventId)
-                            drawEventTitle(mEventRects.get(i).event, mEventRects.get(i).rectF, canvas, topToUse, left);
+                            drawEventTitle(mEventRects.get(i).event, mEventRects.get(i).rectF, canvas, topToUse, indicator.right);
                         else
                             drawEmptyImage(mEventRects.get(i).event, mEventRects.get(i).rectF, canvas, topToUse, left);
 
@@ -1113,7 +1130,10 @@ public class WeekView extends View {
                         mEventRects.get(i).rectF = new RectF(left, top, right, bottom);
                         mEventBackgroundPaint.setColor(mEventRects.get(i).event.getColor() == 0 ? mDefaultEventColor : mEventRects.get(i).event.getColor());
                         mEventBackgroundPaint.setShader(mEventRects.get(i).event.getShader());
-                        canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventBackgroundPaint);
+
+                        RectF indicator = new RectF(left, top, left+mColumnGap, bottom);
+                        canvas.drawRoundRect(indicator, mEventCornerRadius, mEventCornerRadius, mEventBackgroundPaint);
+
                         drawEventTitle(mEventRects.get(i).event, mEventRects.get(i).rectF, canvas, top, left);
                     }
                     else

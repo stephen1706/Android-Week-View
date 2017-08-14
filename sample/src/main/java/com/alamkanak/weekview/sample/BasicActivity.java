@@ -39,7 +39,7 @@ public class BasicActivity extends BaseActivity {
         endTime.set(Calendar.MONTH, newMonth - 1);
         WeekViewEvent event = new WeekViewEvent(1, "Custom Event", startTime, endTime);
         event.setColor(getResources().getColor(R.color.event_color_01));
-        event.setAlert("Hello World");
+        event.setAlert("\u2022");
         events.add(event);
 
         startTime = Calendar.getInstance();
