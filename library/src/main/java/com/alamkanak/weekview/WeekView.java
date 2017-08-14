@@ -56,12 +56,14 @@ import static com.alamkanak.weekview.WeekViewUtil.today;
  */
 public class WeekView extends View {
 
-    private enum Direction {
-        NONE, LEFT, RIGHT, VERTICAL
-    }
 
+
+    private enum Direction {
+        NONE, LEFT, RIGHT, VERTICAL;
+    }
     @Deprecated
     public static final int LENGTH_SHORT = 1;
+
     @Deprecated
     public static final int LENGTH_LONG = 2;
     private final Context mContext;
@@ -139,6 +141,7 @@ public class WeekView extends View {
     private int mTodayHeaderTextColor = Color.rgb(39, 137, 228);
     private int mEventTextSize = 12;
     private int mEventTextColor = Color.BLACK;
+    private int mTimeTextColor = Color.BLACK;
     private int mEventPadding = 8;
     private int mHeaderColumnBackgroundColor = Color.WHITE;
     private int mDefaultEventColor;
@@ -424,6 +427,7 @@ public class WeekView extends View {
             mShowFirstDayOfWeekFirst = a.getBoolean(R.styleable.WeekView_showFirstDayOfWeekFirst, mShowFirstDayOfWeekFirst);
             mHeaderRowPadding = a.getDimensionPixelSize(R.styleable.WeekView_headerRowPadding, mHeaderRowPadding);
             mHeaderRowBackgroundColor = a.getColor(R.styleable.WeekView_headerRowBackgroundColor, mHeaderRowBackgroundColor);
+            mTimeTextColor = a.getColor(R.styleable.WeekView_timeTextColor, mTimeTextColor);
             mDayBackgroundColor = a.getColor(R.styleable.WeekView_dayBackgroundColor, mDayBackgroundColor);
             mFutureBackgroundColor = a.getColor(R.styleable.WeekView_futureBackgroundColor, mFutureBackgroundColor);
             mPastBackgroundColor = a.getColor(R.styleable.WeekView_pastBackgroundColor, mPastBackgroundColor);
@@ -483,7 +487,8 @@ public class WeekView extends View {
         mTimeTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTimeTextPaint.setTextAlign(Paint.Align.RIGHT);
         mTimeTextPaint.setTextSize(mTextSize);
-        mTimeTextPaint.setColor(mHeaderColumnTextColor);
+        mTimeTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mTimeTextPaint.setColor(mTimeTextColor);
         Rect rect = new Rect();
         final String exampleTime = (mTimeColumnResolution % 60 != 0) ? "00:00 PM" : "00 PM";
         mTimeTextPaint.getTextBounds(exampleTime, 0, exampleTime.length(), rect);
@@ -1170,6 +1175,9 @@ public class WeekView extends View {
         if (event.getLocation() != null) {
             bob.append(event.getLocation());
         }
+
+        if(event.getColor() != 0)
+            mEventTextPaint.setColor(event.getColor());
 
         int availableHeight = (int) (rect.bottom - originalTop - mEventPadding * 2);
         int availableWidth = (int) (rect.right - originalLeft - mEventPadding * 2);
