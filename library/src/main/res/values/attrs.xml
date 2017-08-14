@@ -4,6 +4,8 @@
         <attr name="allDayEventHeight" format="dimension"/>
         <attr name="autoLimitTime" format="boolean"/>
         <attr name="columnGap" format="dimension"/>
+        <attr name="indicatorWidth" format="dimension"/>
+
         <attr name="dayBackgroundColor" format="color"/>
         <attr name="dayNameLength" format="enum">
             <enum name="length_short" value="1"/>
