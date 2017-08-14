@@ -172,6 +172,9 @@ public class WeekView extends View {
     private int mMinTime = 0;
     private int mMaxTime = 24;
     private boolean mAutoLimitTime = false;
+    private boolean mShowHeader = true;
+
+
 
     // Listeners.
     private EventClickListener mEventClickListener;
@@ -673,6 +676,12 @@ public class WeekView extends View {
     }
 
     private void calculateHeaderHeight(){
+
+        if(!mShowHeader) {
+            mHeaderHeight = 0;
+            return;
+        }
+
         //Make sure the header is the right size (depends on AllDay events)
         boolean containsAllDayEvent = false;
         if (mEventRects != null && mEventRects.size() > 0) {
@@ -937,35 +946,38 @@ public class WeekView extends View {
             startPixel += mWidthPerDay + mColumnGap;
         }
 
-        // Hide everything in the first cell (top left corner).
-        canvas.clipRect(0, 0, mTimeTextWidth + mHeaderColumnPadding * 2, mHeaderHeight + mHeaderRowPadding * 2, Region.Op.REPLACE);
-        canvas.drawRect(0, 0, mTimeTextWidth + mHeaderColumnPadding * 2, mHeaderHeight + mHeaderRowPadding * 2, mHeaderBackgroundPaint);
+        if(mShowHeader) {
 
-        // Clip to paint header row only.
-        canvas.clipRect(mHeaderColumnWidth, 0, getWidth(), mHeaderHeight + mHeaderRowPadding * 2, Region.Op.REPLACE);
+            // Hide everything in the first cell (top left corner).
+            canvas.clipRect(0, 0, mTimeTextWidth + mHeaderColumnPadding * 2, mHeaderHeight + mHeaderRowPadding * 2, Region.Op.REPLACE);
+            canvas.drawRect(0, 0, mTimeTextWidth + mHeaderColumnPadding * 2, mHeaderHeight + mHeaderRowPadding * 2, mHeaderBackgroundPaint);
 
-        // Draw the header background.
-        canvas.drawRect(0, 0, getWidth(), mHeaderHeight + mHeaderRowPadding * 2, mHeaderBackgroundPaint);
+            // Clip to paint header row only.
+            canvas.clipRect(mHeaderColumnWidth, 0, getWidth(), mHeaderHeight + mHeaderRowPadding * 2, Region.Op.REPLACE);
 
-        // Draw the header row texts.
-        startPixel = startFromPixel;
-        for (int dayNumber = leftDaysWithGaps+1; dayNumber <= leftDaysWithGaps + getRealNumberOfVisibleDays() + 1; dayNumber++) {
-            // Check if the day is today.
-            day = (Calendar) mHomeDate.clone();
-            day.add(Calendar.DATE, dayNumber - 1);
-            boolean isToday = isSameDay(day, today);
+            // Draw the header background.
+            canvas.drawRect(0, 0, getWidth(), mHeaderHeight + mHeaderRowPadding * 2, mHeaderBackgroundPaint);
 
-            // Don't draw days which are outside requested range
-            if(!dateIsValid(day))
-                continue;
+            // Draw the header row texts.
+            startPixel = startFromPixel;
+            for (int dayNumber = leftDaysWithGaps + 1; dayNumber <= leftDaysWithGaps + getRealNumberOfVisibleDays() + 1; dayNumber++) {
+                // Check if the day is today.
+                day = (Calendar) mHomeDate.clone();
+                day.add(Calendar.DATE, dayNumber - 1);
+                boolean isToday = isSameDay(day, today);
 
-            // Draw the day labels.
-            String dayLabel = getDateTimeInterpreter().interpretDate(day);
-            if (dayLabel == null)
-                throw new IllegalStateException("A DateTimeInterpreter must not return null date");
-            canvas.drawText(dayLabel, startPixel + mWidthPerDay / 2, mHeaderTextHeight + mHeaderRowPadding, isToday ? mTodayHeaderTextPaint : mHeaderTextPaint);
-            drawAllDayEvents(day, startPixel, canvas);
-            startPixel += mWidthPerDay + mColumnGap;
+                // Don't draw days which are outside requested range
+                if (!dateIsValid(day))
+                    continue;
+
+                // Draw the day labels.
+                String dayLabel = getDateTimeInterpreter().interpretDate(day);
+                if (dayLabel == null)
+                    throw new IllegalStateException("A DateTimeInterpreter must not return null date");
+                canvas.drawText(dayLabel, startPixel + mWidthPerDay / 2, mHeaderTextHeight + mHeaderRowPadding, isToday ? mTodayHeaderTextPaint : mHeaderTextPaint);
+                drawAllDayEvents(day, startPixel, canvas);
+                startPixel += mWidthPerDay + mColumnGap;
+            }
         }
 
     }
@@ -1520,6 +1532,16 @@ public class WeekView extends View {
         mAreDimensionsInvalid = true;
     }
 
+    /**
+     *
+     * ability to show/hide header as needed
+     * @param mShowHeader
+     */
+    public void setShowHeader(boolean mShowHeader) {
+        this.mShowHeader = mShowHeader;
+        invalidate();
+    }
+
     /////////////////////////////////////////////////////////////////
     //
     //      Functions related to setting and getting the properties.
@@ -1942,6 +1964,8 @@ public class WeekView extends View {
     public void setNewEventTimeResolutionInMinutes(int newEventTimeResolutionInMinutes){
         this.mNewEventTimeResolutionInMinutes = newEventTimeResolutionInMinutes;
     }
+
+
 
     /**
      * <b>Note:</b> Use {@link #setDateTimeInterpreter(DateTimeInterpreter)} and

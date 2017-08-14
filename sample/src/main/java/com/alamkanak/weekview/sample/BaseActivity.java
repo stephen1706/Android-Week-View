@@ -1,7 +1,6 @@
 package com.alamkanak.weekview.sample;
 
 import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
@@ -58,7 +57,9 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         mWeekView.setEmptyViewClickListener(this);
 
         // Set AddEvent Click Listener
-        mWeekView.setAddEventClickListener(this);;
+        mWeekView.setAddEventClickListener(this);
+
+        mWeekView.setShowHeader(false);
 
         // Set minDate
         /*Calendar minDate = Calendar.getInstance();
