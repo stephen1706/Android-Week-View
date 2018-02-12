@@ -1198,13 +1198,16 @@ public class WeekView extends View {
                 // Calculate available number of line counts.
                 int availableLineCount = availableHeight / lineHeight;
                 do {
-                    // Ellipsize text to fit into event rect.
-                    if (event.getId() != mNewEventId)
-                        textLayout = new StaticLayout(TextUtils.ellipsize(bob, mEventTextPaint, availableLineCount * availableWidth, TextUtils.TruncateAt.END), mEventTextPaint, (int) (rect.right - originalLeft - mEventPadding * 2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-
-                    // Reduce line count.
-                    availableLineCount--;
-
+                    try {
+                        // Ellipsize text to fit into event rect.
+                        if (event.getId() != mNewEventId) {
+                            textLayout = new StaticLayout(TextUtils.ellipsize(bob, mEventTextPaint, availableLineCount * availableWidth, TextUtils.TruncateAt.END), mEventTextPaint, (int) (rect.right - originalLeft - mEventPadding * 2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        }
+                        // Reduce line count.
+                        availableLineCount--;
+                    } catch (Exception e){
+                        break;
+                    }
                     // Repeat until text is short enough.
                 } while (textLayout.getHeight() > availableHeight);
 
